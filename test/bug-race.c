@@ -2,6 +2,8 @@
 #include <pthread.h>
 #include <stdio.h>
 
+#define USE_THREADS 1
+
 /* Assume total is 4, then thread 1 executes total++ and thread 2 executes
 total++ concurrently. After the execution, the value of total may be either
 5 or 6. If total is 5, then we lose one increment.
@@ -57,7 +59,7 @@ int main (int argc, char * argv[])
   pair[1].upper = N;
 
   /* Create the different threads. */
-#if 1
+#if USE_THREADS
   for (i = 0; i < 2; i++) 
   	pthread_create (&waiters[i], 0, pick_even, (void *)&pair[i]);
 
