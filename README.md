@@ -48,11 +48,11 @@ link stage) so that it links with Grace instead of with pthreads.
 
 For example, change this link step:
 
-    g++ mycode.cpp -lpthreads -o mycode
+	g++ mycode.cpp -lpthreads -o mycode
 
 to the following:
 
-   g++ -Wl,-T grace.ld mycode.cpp -L/grace/install/dir -lgrace -o mycode
+	g++ -Wl,-T grace.ld mycode.cpp -L/grace/install/dir -lgrace -o mycode
 
 where `/grace/install/dir` should be replaced by wherever you choose
 to install Grace.
@@ -61,7 +61,7 @@ to install Grace.
 64-bit architectures with GNU C++, use the `-m32` compiler flag, as
 in:
   
-  g++ -m32 -Wl,-T grace.ld mycode.cpp -L/grace/install/dir -lgrace -o mycode
+	g++ -m32 -Wl,-T grace.ld mycode.cpp -L/grace/install/dir -lgrace -o mycode
 
 # Limitations #
 
