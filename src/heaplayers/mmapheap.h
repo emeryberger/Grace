@@ -130,9 +130,6 @@ namespace HL {
       if (ptr == MAP_FAILED) {
 	ptr = NULL;
       }
-
-      printf ("MMAP RETURNED PTR = %p\n", ptr);
-
       return ptr;
     }
     
