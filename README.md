@@ -5,7 +5,7 @@ Copyright (c) 2007-13 Emery Berger, University of Massachusetts Amherst.
 Emery Berger
 <http://www.cs.umass.edu/~emery>
 
-## INTRODUCTION ##
+# Introduction #
 
 Grace is a runtime system for safe and efficient multithreading.
 Grace replaces the standard pthreads library with a new runtime
@@ -16,7 +16,7 @@ hardware platforms. Grace can ensure the correctness of
 otherwise-buggy multithreaded programs, and at the same time,
 achieve high performance and scalability.
 
-Grace PREVENTS the following errors:
+Grace *prevents* the following errors:
 
   * deadlocks
   * race conditions
@@ -34,14 +34,14 @@ into a number of threads. Grace provides the highest scalability
 when these threads are reasonably long-lived and do not modify much
 data that is shared across the threads.
 
-## BUILDING GRACE ##
+# Building Grace #
 
 Just change into the `src/` directory and type `make gcc-x86`.
 
 Grace currently works only on x86-based Linux platforms with the GNU
 C/C++ compilers.
 
-## USING GRACE ##
+# Using Grace #
 
 To use Grace, change the final compile step in your program (the
 link stage) so that it links with Grace instead of with pthreads.
@@ -57,13 +57,13 @@ to the following:
 where `/grace/install/dir` should be replaced by wherever you choose
 to install Grace.
 
-NOTE: Grace does not yet work in 64-bit mode. When compiling code on
+*NOTE:* Grace does not yet work in 64-bit mode. When compiling code on
 64-bit architectures with GNU C++, use the `-m32` compiler flag, as
 in:
   
   g++ -m32 -Wl,-T grace.ld mycode.cpp -L/grace/install/dir -lgrace -o mycode
 
-## LIMITATIONS ##
+# Limitations #
 
 * Grace currently is only supported for 32-bit, x86 platforms;
   Linux / GNU only.
@@ -81,7 +81,7 @@ in:
   forever" or that communicate with each other via condition
   variables. Dthreads, our follow-on project, handles such programs.
 
-## MORE INFORMATION ##
+# More information #
 
 Grace consists of several parts: (1) a novel VIRTUAL MEMORY BASED
 SOFTWARE TRANSACTIONAL MEMORY system (STM) implemented on top of
