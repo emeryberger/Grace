@@ -28,12 +28,8 @@
 #include <stdarg.h>
 #include "xrun.h"
 
-#ifndef DETERMINISTIC_THREADS
-#define DETERMINISTIC_THREADS 0 // FIX ME!!
-#endif
-
 #define REPLACE_HEAP_FUNCTIONS 1
-#define REPLACE_IO_FUNCTIONS 0
+#define REPLACE_IO_FUNCTIONS 1
 
 extern "C" {
 
@@ -240,7 +236,7 @@ extern "C" {
   }
 
   int pthread_attr_getstacksize (const pthread_attr_t *, size_t * s) {
-    *s = 1048576UL; // really? FIX ME
+    *s = 1048576UL; // Arbitrary value for now.
     return 0;
   }
 
@@ -263,57 +259,6 @@ extern "C" {
     gracesync ((void *) tid, val);
     return 0;
   }
-
-#if 0
-  int pthread_cond_init (pthread_cond_t * cond, const pthread_condattr_t *) {
-#if DETERMINISTIC_THREADS
-    bool * v = (bool *) cond;
-    *v = false;
-    cond = (pthread_cond_t *) v;
-#endif
-    return 0;
-  }
-
-  int pthread_cond_broadcast (pthread_cond_t * cond) {
-#if DETERMINISTIC_THREADS
-    // Make any updates visible to other threads.
-    bool * v = (bool *) cond;
-    *v = true;
-    xrun::getInstance().punctuate();
-#endif
-    return 0; // gracebroadcast (cond);
-  }
-
-  int pthread_cond_signal (pthread_cond_t * cond) {
-#if DETERMINISTIC_THREADS
-    bool * v = (bool *) cond;
-    *v = true;
-    // Make any updates visible to other threads.
-    xrun::getInstance().punctuate();
-#endif
-    return 0; //gracesignal (cond);
-  }
-
-  int pthread_cond_wait (pthread_cond_t * cond,
-			 pthread_mutex_t * mutex) {
-#if DETERMINISTIC_THREADS
-    do {
-      // Make any updates visible to other threads.
-      xrun::getInstance().punctuate();
-      if (*((bool *) cond)) {
-	break;
-      }
-      sleep (1);
-    } while (true);
-#endif
-
-    return 0; // gracewait (cond);
-  }
-
-  int pthread_cond_destroy (pthread_cond_t * cond) {
-    return 0; // graceconddestroy (cond);
-  }
-#endif
 
 }
 
@@ -430,10 +375,10 @@ void operator delete[] (void * ptr)
 
 
 #if REPLACE_IO_FUNCTIONS
-
 extern "C" 
 {
 
+#if 0
   static int open (const char * pathname, int flags, mode_t mode) {
     return xrun::getInstance().open (pathname, flags, mode);
   }
@@ -453,15 +398,16 @@ extern "C"
   int puts (const char * str) {
     return xrun::getInstance().puts (str);
   }
+#endif
 
-#if 0
+#if 1
   int printf (const char * format, ...) {
-    gracepause();
+    xrun::getInstance().atomicEnd();
     va_list ap;
     va_start (ap, format);
     int v = vprintf (format, ap);
     va_end (ap);
-    graceresume();
+    xrun::getInstance().atomicBegin();
     return v;
   }
 #endif
